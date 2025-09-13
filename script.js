@@ -40,8 +40,7 @@ closeMapBtn.addEventListener('click', () => mapModal.classList.add('hidden'));
 openCalculatorBtn.addEventListener('click', () => calculatorModal.classList.remove('hidden'));
 mobileOpenCalculatorBtn.addEventListener('click', () => calculatorModal.classList.remove('hidden'));
 closeCalculatorBtn.addEventListener('click', () => calculatorModal.classList.add('hidden'));
-
-// Close modal if clicking on the background overlay
+        
 window.addEventListener('click', (event) => {
     if (event.target == mapModal) {
         mapModal.classList.add('hidden');
@@ -50,7 +49,6 @@ window.addEventListener('click', (event) => {
         calculatorModal.classList.add('hidden');
     }
 });
-
 
 // --- Pollution Footprint Calculator ---
 const calculateBtn = document.getElementById('calculate-btn');
@@ -91,7 +89,6 @@ calculateBtn.addEventListener('click', () => {
         </div>
     `;
 
-
     if (totalScore <= 10) {
         resultCategory = 'Low Footprint';
         resultColorClass = 'bg-green-100 border-green-500';
@@ -109,6 +106,42 @@ calculateBtn.addEventListener('click', () => {
     resultTips.innerHTML = personalizedTips;
     resultContainer.classList.remove('hidden');
 
-    // Scroll to the result
     resultContainer.scrollIntoView({ behavior: 'smooth' });
 });
+
+// --- NEW: Scroll Animation Logic ---
+const scrollElements = document.querySelectorAll('.scroll-animate');
+
+const elementInView = (el, dividend = 1) => {
+    const elementTop = el.getBoundingClientRect().top;
+    return (
+        elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
+    );
+};
+
+const displayScrollElement = (element) => {
+    element.classList.add('is-visible');
+};
+
+const hideScrollElement = (element) => {
+    element.classList.remove('is-visible');
+};
+
+const handleScrollAnimation = () => {
+    scrollElements.forEach((el) => {
+        if (elementInView(el, 1.25)) {
+            displayScrollElement(el);
+        } else {
+            // Optional: uncomment the line below to make elements re-animate every time they are scrolled to
+            // hideScrollElement(el); 
+        }
+    });
+};
+
+window.addEventListener('scroll', () => {
+    handleScrollAnimation();
+});
+
+// Trigger once on load for elements already in view
+handleScrollAnimation();
+
