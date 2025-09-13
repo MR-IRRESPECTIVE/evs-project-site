@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Urban Lung - Air Pollution Filter Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* A very light grey background */
+        }
+        .aqi-widget-container, .map-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        /* Style for selected radio button label */
+        .calculator-form input[type="radio"]:checked + label {
+            border-color: #10b981; /* emerald-500 */
+            background-color: #d1fae5; /* emerald-100 */
+            color: #047857; /* emerald-700 */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-md">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <h1 class="text-xl font-bold text-gray-800">The Urban Lung</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#home" class="text-gray-600 hover:text-emerald-600 transition duration-300">Home</a>
+                    <button id="open-map-btn" class="text-gray-600 hover:text-emerald-600 transition duration-300">Green Lungs Map</button>
+                    <button id="open-calculator-btn" class="text-gray-600 hover:text-emerald-600 transition duration-300">Footprint Calculator</button>
+                    <a href="#model" class="text-gray-600 hover:text-emerald-600 transition duration-300">How It Works</a>
+                    <a href="#dashboard" class="text-gray-600 hover:text-emerald-600 transition duration-300">Dashboard</a>
+                    <a href="#scaling" class="text-gray-600 hover:text-emerald-600 transition duration-300">Scaling Up</a>
+                    <a href="#solutions" class="text-gray-600 hover:text-emerald-600 transition duration-300">Solutions</a>
+                </nav>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:text-emerald-600 hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2 bg-white">
+             <a href="#home" class="block text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Home</a>
+             <button id="mobile-open-map-btn" class="block w-full text-left text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Green Lungs Map</button>
+             <button id="mobile-open-calculator-btn" class="block w-full text-left text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Footprint Calculator</button>
+             <a href="#model" class="block text-gray-600 hover:text-emerald-600 transition duration-300 py-2">How It Works</a>
+             <a href="#dashboard" class="block text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Live Dashboard</a>
+             <a href="#scaling" class="block text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Scaling Up</a>
+             <a href="#solutions" class="block text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Solutions</a>
+        </div>
+    </header>
+
+    <main class="pt-20"> <!-- Padding to offset the fixed header -->
+
+        <!-- Section 1: Home -->
+        <section id="home" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4">The Urban Lung</h2>
+                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">Cleaning Our City's Air, One Particle at a Time.</p>
+                <div class="max-w-4xl mx-auto bg-gray-200 rounded-xl shadow-lg overflow-hidden">
+                     <img src="https://placehold.co/1000x600/e2e8f0/475569?text=Your+Finished+Model+Photo" alt="DIY Air Pollution Filter Model" class="w-full h-auto object-cover">
+                </div>
+                <div class="mt-12 text-left max-w-3xl mx-auto">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Welcome!</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        This is the digital companion for my EVS project, "The Urban Lung." This project features a working model of a multi-stage air filter designed to show how we can trap harmful pollutants from the air we breathe. But a model is just the beginning.
+                    </p>
+                    <p class="mt-4 text-gray-700 leading-relaxed">
+                        Here, we will explore the science behind the filter, connect it to the real-world challenge of air pollution in our city, Kolkata, and discover the steps we can all take towards a healthier future.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: How It Works -->
+        <section id="model" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">A Look Inside: The Science of Filtration</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">My model uses a three-stage process to clean the air, with each layer targeting a different type of pollutant. This is the same principle used in high-tech air purifiers.</p>
+                </div>
+                <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 text-left">
+                    <!-- Layer 1 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">1</div>
+                            <h3 class="text-xl font-bold text-gray-800">Pre-Filter (Cotton Wool)</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">This layer serves as the crucial first line of defense. It uses **mechanical filtration** to trap the largest airborne particles—things we can often see, like road dust, construction debris, pollen, and hair. By removing these larger contaminants first, the pre-filter prevents the more sensitive inner layers from getting clogged, dramatically increasing their lifespan and efficiency.</p>
+                    </div>
+                    <!-- Layer 2 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">2</div>
+                            <h3 class="text-xl font-bold text-gray-800">Adsorption Filter (Activated Charcoal)</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">This layer works through a chemical process called **adsorption**, where pollutant molecules stick to its surface. Activated charcoal is treated to create millions of microscopic pores, giving it an incredibly large surface area. This acts like a sponge for harmful gases, traffic fumes, cooking smells, and Volatile Organic Compounds (VOCs), effectively removing odours and invisible chemical threats from the air.</p>
+                    </div>
+                    <!-- Layer 3 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">3</div>
+                            <h3 class="text-xl font-bold text-gray-800">Fine Particle Filter (Mask Cloth)</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">This is the most critical layer for protecting our health. It's designed to trap the most dangerous microscopic particles, especially **PM2.5** (particles less than 2.5 micrometers wide, or 30 times smaller than a human hair). These particles can bypass our body's natural defenses and enter deep into our lungs and bloodstream, causing serious health issues. This filter acts as a fine net, capturing these invisible dangers.</p>
+                    </div>
+                </div>
+                <div class="mt-16 text-center">
+                    <h3 class="text-2xl font-bold text-gray-800">Filters After Demonstration</h3>
+                    <p class="text-md text-gray-600 mt-2 max-w-2xl mx-auto">This is what the filters looked like after capturing smoke for just 60 seconds. Each layer plays a vital role.</p>
+                </div>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Frame 1: Pre-Filter -->
+                    <div class="bg-white p-4 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/400x300/e2e8f0/475569?text=Dirty+Cotton+Filter" alt="Dirty Pre-Filter" class="w-full h-auto object-cover rounded-lg mb-4">
+                        <h4 class="font-bold text-gray-700">Pre-Filter (Cotton)</h4>
+                        <p class="text-sm text-gray-500">Visibly blackened by soot and large particles.</p>
+                    </div>
+                    <!-- Frame 2: Charcoal Filter -->
+                    <div class="bg-white p-4 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/400x300/e2e8f0/475569?text=Used+Charcoal+Filter" alt="Used Charcoal Filter" class="w-full h-auto object-cover rounded-lg mb-4">
+                        <h4 class="font-bold text-gray-700">Adsorption Filter (Charcoal)</h4>
+                        <p class="text-sm text-gray-500">Fine grey dust is trapped on the surface.</p>
+                    </div>
+                    <!-- Frame 3: Fine Particle Filter -->
+                    <div class="bg-white p-4 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/400x300/e2e8f0/475569?text=Used+Mask+Filter" alt="Used Fine Particle Filter" class="w-full h-auto object-cover rounded-lg mb-4">
+                        <h4 class="font-bold text-gray-700">Fine Particle Filter (Mask)</h4>
+                        <p class="text-sm text-gray-500">Slightly discoloured from stopping micro-particles.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Live Dashboard -->
+        <section id="dashboard" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">The Big Picture: Kolkata's Live Air Dashboard</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">My model cleans a small amount of air. But what is the condition of the air across our entire city right now? This live widget shows the real-time Air Quality Index (AQI).</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Live Air Quality Index (AQI) for Kolkata</h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">The AQI is like a thermometer for air pollution, running from 0 to 500. This widget shows the live data from a monitoring station in Kolkata. The colour tells you the level of health risk at a glance.</p>
+                        <div class="aqi-widget-container">
+                             <iframe 
+                                src="https://aqicn.org/city/kolkata/embed-xxl/" 
+                                style="border: none; width: 100%; height: 380px;"
+                                scrolling="no"
+                                seamless="seamless">
+                            </iframe>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">What's in Our Air?</h3>
+                        <p class="text-gray-700 mb-4 leading-relaxed">The AQI number you see is caused by several factors in our city:</p>
+                        <ul class="space-y-3 text-gray-600">
+                            <li class="flex"><span class="text-emerald-500 font-bold mr-2">&#10148;</span><strong>Vehicular Emissions:</strong> Exhaust from buses, cars, and autos.</li>
+                            <li class="flex"><span class="text-emerald-500 font-bold mr-2">&#10148;</span><strong>Construction Dust:</strong> From the Metro and new buildings.</li>
+                            <li class="flex"><span class="text-emerald-500 font-bold mr-2">&#10148;</span><strong>Industrial Pollution:</strong> From factories in and around the city.</li>
+                            <li class="flex"><span class="text-emerald-500 font-bold mr-2">&#10148;</span><strong>Seasonal Factors:</strong> In winter, cool air traps pollutants, making the air quality much worse.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 6: Scaling Up -->
+        <section id="scaling" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">From Prototype to Planet: Scaling Up the Solution</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">My small model demonstrates a powerful principle. But how can this technology be applied on a large scale to make a real difference in a city like Kolkata?</p>
+                </div>
+                <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Industrial Chimney Filters</h3>
+                        <p class="text-gray-600">Factories and power plants can be fitted with large-scale "scrubbers" and electrostatic precipitators. These are giant versions of my filter that can remove over 99% of particulate matter and harmful gases before they ever enter our atmosphere.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Urban Air Purification Towers</h3>
+                        <p class="text-gray-600">Some cities are experimenting with massive outdoor air purifiers, often called "smog towers." These towers draw in polluted city air, filter it using multiple layers just like my model, and release cleaner air back into the environment.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Advanced Building Filtration (HVAC)</h3>
+                        <p class="text-gray-600">Every large modern building, like malls, offices, and hospitals, uses a centralized HVAC system with high-efficiency filters. This creates safe indoor air quality, protecting thousands of people from outdoor pollution daily.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Solutions -->
+        <section id="solutions" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">From Problem to Action</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Air pollution has real effects on our health, but the solution requires action from all of us. Here's how we can contribute.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Personal Actions</h3>
+                        <ul class="space-y-4 text-gray-600">
+                           <li class="flex items-center"><svg class="w-5 h-5 text-emerald-500 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Use Public Transport (Metro/Bus)</li>
+                           <li class="flex items-center"><svg class="w-5 h-5 text-emerald-500 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Wear an N95 mask on high AQI days</li>
+                           <li class="flex items-center"><svg class="w-5 h-5 text-emerald-500 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Conserve electricity at home</li>
+                           <li class="flex items-center"><svg class="w-5 h-5 text-emerald-500 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Add air-purifying indoor plants</li>
+                        </ul>
+                    </div>
+                     <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Community Actions</h3>
+                        <ul class="space-y-4 text-gray-600">
+                           <li class="flex items-center"><svg class="w-5 h-5 text-emerald-500 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Plant trees in your neighbourhood</li>
+                           <li class="flex items-center"><svg class="w-5 h-5 text-emerald-500 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Spread awareness with friends and family</li>
+                           <li class="flex items-center"><svg class="w-5 h-5 text-emerald-500 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Never burn trash or leaves</li>
+                           <li class="flex items-center"><svg class="w-5 h-5 text-emerald-500 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Report vehicles emitting excessive smoke</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for Green Lungs Map -->
+    <div id="map-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-6xl max-h-[90vh] flex flex-col">
+            <button id="close-map-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition z-10">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">Discover Kolkata's Green Lungs</h2>
+                <p class="text-md text-gray-600 mt-2 max-w-2xl mx-auto">These are the city's natural air filters. Explore them below and click to view them on a map.</p>
+            </div>
+            <!-- New Gallery Layout -->
+            <div class="flex-grow overflow-y-auto pr-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Card 1: The Maidan -->
+                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden flex flex-col">
+                        <img src="maidan.jpg" class="w-full h-48 object-cover" alt="The Maidan">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-800">The Maidan</h3>
+                            <p class="text-gray-600 mt-2 flex-grow">Often called the "Lungs of Kolkata," this vast urban park is the city's most important green space, providing fresh air and recreational areas for everyone.</p>
+                            <a href="https://maps.app.goo.gl/EAXqzXy6nbnYqRZu8" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-emerald-500 text-white font-bold text-center py-2 px-4 rounded-lg hover:bg-emerald-600 transition duration-300">View on Map</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Rabindra Sarobar -->
+                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden flex flex-col">
+                        <img src="rabindra sarobar.jpg" class="w-full h-48 object-cover" alt="Rabindra Sarobar Lake">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-800">Rabindra Sarobar</h3>
+                            <p class="text-gray-600 mt-2 flex-grow">An expansive artificial lake surrounded by gardens and trees, this area is a biodiversity hotspot and a favourite for morning walkers and nature lovers.</p>
+                            <a href="https://www.google.com/maps/place/Rabindra+Sarobar" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-emerald-500 text-white font-bold text-center py-2 px-4 rounded-lg hover:bg-emerald-600 transition duration-300">View on Map</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Central Park, Salt Lake -->
+                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden flex flex-col">
+                        <img src="central park salt lake.jpeg" class="w-full h-48 object-cover" alt="Central Park, Salt Lake">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-800">Central Park, Salt Lake</h3>
+                            <p class="text-gray-600 mt-2 flex-grow">The second-largest open space in Kolkata, featuring a large lake, theme gardens, and a butterfly park. It's a crucial green zone for the eastern part of the city.</p>
+                            <a href="https://www.google.com/maps/place/Central+Park,+Salt+Lake" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-emerald-500 text-white font-bold text-center py-2 px-4 rounded-lg hover:bg-emerald-600 transition duration-300">View on Map</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Botanical Garden -->
+                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden flex flex-col">
+                        <img src="Shibpur-Botanical-Garden.jpg" class="w-full h-48 object-cover" alt="Acharya Jagadish Chandra Bose Indian Botanic Garden">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-800">Botanical Garden</h3>
+                            <p class="text-gray-600 mt-2 flex-grow">Home to The Great Banyan Tree, this massive garden in Shibpur houses thousands of plant species, acting as a major repository of clean air and biodiversity.</p>
+                            <a href="https://maps.app.goo.gl/Cgrr8wNb87Vyqm84A" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-emerald-500 text-white font-bold text-center py-2 px-4 rounded-lg hover:bg-emerald-600 transition duration-300">View on Map</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Pollution Footprint Calculator -->
+    <div id="calculator-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+         <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <button id="close-calculator-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">What's Your Pollution Footprint?</h2>
+                <p class="text-md text-gray-600 mt-2 max-w-xl mx-auto">Answer these questions to see how your habits impact our city's air quality.</p>
+            </div>
+            <div class="max-w-2xl mx-auto">
+                <div id="calculator-form" class="calculator-form space-y-6">
+                    <!-- Questions remain the same -->
+                    <!-- Question 1: Travel -->
+                    <div>
+                        <label class="font-bold text-gray-700 text-lg">1. How do you primarily travel in Kolkata?</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-3">
+                            <input type="radio" name="travel" id="travel-car" class="hidden" data-score="10" data-tip="Consider using the Metro or carpooling. Even one less car journey a week makes a big difference!">
+                            <label for="travel-car" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">Car / Auto / Taxi</label>
+                            
+                            <input type="radio" name="travel" id="travel-bus" class="hidden" data-score="5" data-tip="Great choice! Public transport significantly reduces per-person emissions.">
+                            <label for="travel-bus" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">Bus / Metro</label>
+                            
+                            <input type="radio" name="travel" id="travel-eco" class="hidden" data-score="1" data-tip="Excellent! You are actively helping keep our city's air clean.">
+                            <label for="travel-eco" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">Bicycle / Walking</label>
+                        </div>
+                    </div>
+
+                    <!-- Question 2: AC Usage -->
+                    <div>
+                        <label class="font-bold text-gray-700 text-lg">2. On a typical summer day, how many hours do you use an AC?</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-3">
+                            <input type="radio" name="ac" id="ac-low" class="hidden" data-score="2" data-tip="Good job! Minimal AC use saves a lot of energy.">
+                            <label for="ac-low" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">0-2 hours</label>
+                            
+                            <input type="radio" name="ac" id="ac-medium" class="hidden" data-score="6" data-tip="Try setting the temperature to 25°C. It's comfortable and much more energy-efficient.">
+                            <label for="ac-medium" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">3-6 hours</label>
+
+                            <input type="radio" name="ac" id="ac-high" class="hidden" data-score="10" data-tip="Remember that ACs consume a lot of electricity. Using a fan or keeping blinds closed can help reduce AC time.">
+                            <label for="ac-high" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">7+ hours</label>
+                        </div>
+                    </div>
+
+                    <!-- Question 3: Plastic -->
+                     <div>
+                        <label class="font-bold text-gray-700 text-lg">3. How often do you buy items with single-use plastic packaging?</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-3">
+                            <input type="radio" name="plastic" id="plastic-low" class="hidden" data-score="1" data-tip="Fantastic! Avoiding single-use plastic reduces waste and the pollution from its production.">
+                            <label for="plastic-low" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">Rarely</label>
+                            
+                            <input type="radio" name="plastic" id="plastic-medium" class="hidden" data-score="5" data-tip="You're on the right track. Try carrying a reusable bag and water bottle to cut down even more.">
+                            <label for="plastic-medium" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">Sometimes</label>
+
+                            <input type="radio" name="plastic" id="plastic-high" class="hidden" data-score="8" data-tip="Look for alternatives with less packaging. Buying loose vegetables and grains can make a big impact.">
+                            <label for="plastic-high" class="block text-center p-3 border-2 rounded-lg cursor-pointer hover:border-emerald-400 transition">Often</label>
+                        </div>
+                    </div>
+                    
+                    <p id="calculator-error" class="text-red-500 text-center hidden">Please answer all questions before calculating.</p>
+
+                    <div class="text-center pt-2">
+                        <button id="calculate-btn" class="bg-emerald-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-600 transition duration-300 text-lg">Calculate My Footprint</button>
+                    </div>
+                </div>
+
+                <!-- Result Display -->
+                <div id="result-container" class="hidden mt-8 p-6 rounded-lg text-center">
+                    <h3 id="result-title" class="text-2xl font-bold mb-2"></h3>
+                    <p id="result-score" class="text-lg mb-4"></p>
+                    <div id="result-tips" class="text-left space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 The Urban Lung Project. An EVS initiative.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Mobile Menu ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a, button');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // --- Smooth Scrolling ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // --- Modal Handling ---
+        const mapModal = document.getElementById('map-modal');
+        const calculatorModal = document.getElementById('calculator-modal');
+
+        const openMapBtn = document.getElementById('open-map-btn');
+        const mobileOpenMapBtn = document.getElementById('mobile-open-map-btn');
+        const closeMapBtn = document.getElementById('close-map-btn');
+        
+        const openCalculatorBtn = document.getElementById('open-calculator-btn');
+        const mobileOpenCalculatorBtn = document.getElementById('mobile-open-calculator-btn');
+        const closeCalculatorBtn = document.getElementById('close-calculator-btn');
+
+        openMapBtn.addEventListener('click', () => mapModal.classList.remove('hidden'));
+        mobileOpenMapBtn.addEventListener('click', () => mapModal.classList.remove('hidden'));
+        closeMapBtn.addEventListener('click', () => mapModal.classList.add('hidden'));
+
+        openCalculatorBtn.addEventListener('click', () => calculatorModal.classList.remove('hidden'));
+        mobileOpenCalculatorBtn.addEventListener('click', () => calculatorModal.classList.remove('hidden'));
+        closeCalculatorBtn.addEventListener('click', () => calculatorModal.classList.add('hidden'));
+        
+        // Close modal if clicking on the background overlay
+        window.addEventListener('click', (event) => {
+            if (event.target == mapModal) {
+                mapModal.classList.add('hidden');
+            }
+            if (event.target == calculatorModal) {
+                calculatorModal.classList.add('hidden');
+            }
+        });
+
+
+        // --- Pollution Footprint Calculator ---
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultContainer = document.getElementById('result-container');
+        const resultTitle = document.getElementById('result-title');
+        const resultScore = document.getElementById('result-score');
+        const resultTips = document.getElementById('result-tips');
+        const calculatorError = document.getElementById('calculator-error');
+
+        calculateBtn.addEventListener('click', () => {
+            const travelAnswer = document.querySelector('input[name="travel"]:checked');
+            const acAnswer = document.querySelector('input[name="ac"]:checked');
+            const plasticAnswer = document.querySelector('input[name="plastic"]:checked');
+
+            if (!travelAnswer || !acAnswer || !plasticAnswer) {
+                calculatorError.classList.remove('hidden');
+                return;
+            }
+            calculatorError.classList.add('hidden');
+
+            let totalScore = 0;
+            totalScore += parseInt(travelAnswer.dataset.score);
+            totalScore += parseInt(acAnswer.dataset.score);
+            totalScore += parseInt(plasticAnswer.dataset.score);
+            
+            let resultCategory = '';
+            let resultColorClass = '';
+            let personalizedTips = `
+                <p class="font-bold text-lg mb-2">Here are your personalized tips:</p>
+                <div class="border-l-4 p-4 rounded-r-lg bg-gray-50">
+                    <p><strong class="text-gray-700">For your travel habits:</strong> ${travelAnswer.dataset.tip}</p>
+                </div>
+                <div class="border-l-4 p-4 rounded-r-lg bg-gray-50">
+                    <p><strong class="text-gray-700">For your AC usage:</strong> ${acAnswer.dataset.tip}</p>
+                </div>
+                <div class="border-l-4 p-4 rounded-r-lg bg-gray-50">
+                    <p><strong class="text-gray-700">For your packaging choices:</strong> ${plasticAnswer.dataset.tip}</p>
+                </div>
+            `;
+
+
+            if (totalScore <= 10) {
+                resultCategory = 'Low Footprint';
+                resultColorClass = 'bg-green-100 border-green-500';
+            } else if (totalScore <= 20) {
+                resultCategory = 'Medium Footprint';
+                resultColorClass = 'bg-yellow-100 border-yellow-500';
+            } else {
+                resultCategory = 'High Footprint';
+                resultColorClass = 'bg-red-100 border-red-500';
+            }
+            
+            resultContainer.className = 'mt-8 p-6 rounded-lg text-center border-t-4 ' + resultColorClass;
+            resultTitle.textContent = 'Your Result: ' + resultCategory;
+            resultScore.textContent = `Your total score is ${totalScore}. The lower the score, the better!`;
+            resultTips.innerHTML = personalizedTips;
+            resultContainer.classList.remove('hidden');
+
+            // Scroll to the result
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
+
