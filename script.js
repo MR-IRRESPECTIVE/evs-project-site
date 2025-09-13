@@ -24,7 +24,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // --- Main Modal Handling ---
 const mapModal = document.getElementById('map-modal');
 const calculatorModal = document.getElementById('calculator-modal');
-const wasteSorterModal = document.getElementById('waste-sorter-modal'); // New modal
+const wasteSorterModal = document.getElementById('waste-sorter-modal');
 
 const openMapBtn = document.getElementById('open-map-btn');
 const mobileOpenMapBtn = document.getElementById('mobile-open-map-btn');
@@ -34,9 +34,9 @@ const openCalculatorBtn = document.getElementById('open-calculator-btn');
 const mobileOpenCalculatorBtn = document.getElementById('mobile-open-calculator-btn');
 const closeCalculatorBtn = document.getElementById('close-calculator-btn');
 
-const openSorterBtn = document.getElementById('open-sorter-btn'); // New button
-const mobileOpenSorterBtn = document.getElementById('mobile-open-sorter-btn'); // New mobile button
-const closeSorterBtn = document.getElementById('close-sorter-btn'); // New close button
+const openSorterBtn = document.getElementById('open-sorter-btn');
+const mobileOpenSorterBtn = document.getElementById('mobile-open-sorter-btn');
+const closeSorterBtn = document.getElementById('close-sorter-btn');
 
 openMapBtn.addEventListener('click', () => mapModal.classList.remove('hidden'));
 mobileOpenMapBtn.addEventListener('click', () => mapModal.classList.remove('hidden'));
@@ -182,101 +182,86 @@ calculateBtn.addEventListener('click', () => {
 });
 
 
-// --- AI-POWERED WASTE SORTER ---
+// --- Waste Sorter Logic ---
 const wasteSearchInput = document.getElementById('waste-search-input');
 const wasteResultContainer = document.getElementById('waste-result-container');
 const quickSearchButtons = document.querySelectorAll('.waste-quick-search');
 
-const API_KEY = ""; // Keep this empty.
+let wasteData = {}; // This will be filled with data from the JSON file.
 
-const getWasteSortingInfo = async (searchTerm) => {
-    // Show loading indicator
-    wasteResultContainer.innerHTML = `
-        <div class="p-4 rounded-lg border-l-4 bg-gray-100 border-gray-500 text-gray-800">
-            <h3 class="font-bold text-lg">AI is thinking...</h3>
-            <p class="mt-2">Analyzing "${searchTerm}" based on KMC guidelines.</p>
-        </div>
-    `;
+// Function to load the waste data from an external file
+async function loadWasteData() {
+    // Disable the search input while loading
+    wasteSearchInput.disabled = true;
+    wasteSearchInput.placeholder = "Loading database...";
+    try {
+        const response = await fetch('waste-data.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        wasteData = await response.json();
+        console.log("Waste database loaded successfully!");
+        // Enable the search input after loading
+        wasteSearchInput.disabled = false;
+        wasteSearchInput.placeholder = "e.g., plastic bottle, newspaper, battery...";
+    } catch (error) {
+        console.error("Could not load waste data:", error);
+        wasteResultContainer.innerHTML = `<p class="text-red-500 text-center">Error: Could not load the waste item database. Please check the file name and content.</p>`;
+        wasteSearchInput.placeholder = "Database failed to load";
+    }
+}
 
-    const systemPrompt = "You are an expert on waste management and segregation for the Kolkata Municipal Corporation (KMC). Your role is to analyze a waste item provided by a user and give a clear, concise, and structured JSON response about how to dispose of it. Your response MUST follow the provided JSON schema. Classify the item into one of three bins: 'green' for biodegradable, 'blue' for non-biodegradable/recyclable, or 'hazardous' for e-waste, medical waste, or chemicals. Provide a brief, helpful one-sentence instruction for disposal.";
+// Load the data as soon as the script runs
+loadWasteData();
 
-    const payload = {
-        contents: [{
-            parts: [{ text: `Analyze this waste item: "${searchTerm}"` }]
-        }],
-        systemInstruction: {
-            parts: [{ text: systemPrompt }]
-        },
-        generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: {
-                type: "OBJECT",
-                properties: {
-                    "bin": { "type": "STRING", "description": "The correct bin: 'green', 'blue', or 'hazardous'." },
-                    "type": { "type": "STRING", "description": "The category of waste, e.g., 'Biodegradable Waste'." },
-                    "instruction": { "type": "STRING", "description": "A single, clear sentence on how to dispose of the item." }
-                },
-                required: ["bin", "type", "instruction"]
+const displayWasteResult = (item) => {
+    const searchTerm = item.toLowerCase().trim();
+    if (!searchTerm) return; // Do nothing if search is empty
+
+    let result = null;
+    let matchedKey = '';
+
+    // Direct match check first for accuracy
+    if (wasteData[searchTerm]) {
+        result = wasteData[searchTerm];
+        matchedKey = searchTerm;
+    } else {
+        // Partial match check (e.g., "bottle" finds "plastic bottle")
+        for (const key in wasteData) {
+            if (key.includes(searchTerm)) {
+                result = wasteData[key];
+                matchedKey = key;
+                break; // Stop at the first partial match
             }
         }
-    };
+    }
+    
+    if (result) {
+        let binColorClass = '';
+        if (result.bin === 'green') binColorClass = 'bg-green-100 border-green-500 text-green-800';
+        else if (result.bin === 'blue') binColorClass = 'bg-blue-100 border-blue-500 text-blue-800';
+        else if (result.bin === 'hazardous') binColorClass = 'bg-red-100 border-red-500 text-red-800';
 
-    try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-            throw new Error(`API Error: ${response.statusText}`);
-        }
-
-        const result = await response.json();
-        const candidate = result.candidates?.[0];
-
-        if (candidate && candidate.content?.parts?.[0]?.text) {
-            const jsonResponse = JSON.parse(candidate.content.parts[0].text);
-            displayAIWasteResult(searchTerm, jsonResponse);
-        } else {
-            throw new Error("Invalid response structure from AI.");
-        }
-    } catch (error) {
-        console.error("Error fetching AI response:", error);
         wasteResultContainer.innerHTML = `
-            <div class="p-4 rounded-lg border-l-4 bg-red-100 border-red-500 text-red-800">
-                <h3 class="font-bold text-lg">Oops! Something went wrong.</h3>
-                <p class="mt-2">Could not get a response from the AI. Please try again in a moment.</p>
+            <div class="p-4 rounded-lg border-l-4 ${binColorClass}">
+                <h3 class="font-bold text-lg">${matchedKey.charAt(0).toUpperCase() + matchedKey.slice(1)}</h3>
+                <p class="font-semibold mt-1">${result.type}</p>
+                <p class="mt-2">${result.instruction}</p>
+            </div>
+        `;
+    } else {
+        wasteResultContainer.innerHTML = `
+             <div class="p-4 rounded-lg border-l-4 bg-gray-100 border-gray-500 text-gray-800">
+                <h3 class="font-bold text-lg">Result not found for "${searchTerm}"</h3>
+                <p class="mt-2">Please check your spelling or try a more general term. For items not listed, it's safest to consult KMC guidelines directly.</p>
             </div>
         `;
     }
 };
 
-const displayAIWasteResult = (searchTerm, result) => {
-    let binColorClass = 'bg-gray-100 border-gray-500 text-gray-800'; // Default
-    if (result.bin === 'green') binColorClass = 'bg-green-100 border-green-500 text-green-800';
-    else if (result.bin === 'blue') binColorClass = 'bg-blue-100 border-blue-500 text-blue-800';
-    else if (result.bin === 'hazardous') binColorClass = 'bg-red-100 border-red-500 text-red-800';
-
-    wasteResultContainer.innerHTML = `
-        <div class="p-4 rounded-lg border-l-4 ${binColorClass}">
-            <h3 class="font-bold text-lg">${searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1)}</h3>
-            <p class="font-semibold mt-1">${result.type}</p>
-            <p class="mt-2">${result.instruction}</p>
-        </div>
-    `;
-};
-
-const handleSearch = (term) => {
-    const searchTerm = term.trim();
-    if (searchTerm) {
-        getWasteSortingInfo(searchTerm);
-    }
-};
-
 wasteSearchInput.addEventListener('keyup', (event) => {
     if (event.key === 'Enter') {
-        handleSearch(event.target.value);
+        displayWasteResult(event.target.value);
     }
 });
 
@@ -284,56 +269,7 @@ quickSearchButtons.forEach(button => {
     button.addEventListener('click', () => {
         const searchTerm = button.textContent;
         wasteSearchInput.value = searchTerm;
-        handleSearch(searchTerm);
+        displayWasteResult(searchTerm);
     });
 });
 
-// --- Scroll Animation Logic ---
-const scrollElements = document.querySelectorAll('.scroll-animate');
-
-const elementInView = (el, dividend = 1) => {
-    const elementTop = el.getBoundingClientRect().top;
-    return (
-        elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
-    );
-};
-
-const displayScrollElement = (element) => {
-    element.classList.add('is-visible');
-};
-
-const handleScrollAnimation = () => {
-    scrollElements.forEach((el) => {
-        if (elementInView(el, 1.25)) {
-            displayScrollElement(el);
-        }
-    });
-};
-
-window.addEventListener('scroll', handleScrollAnimation);
-handleScrollAnimation(); // Trigger on load
-
-// --- Back to Top Button Logic ---
-const backToTopBtn = document.getElementById('back-to-top-btn');
-
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-        backToTopBtn.classList.remove('hidden');
-        backToTopBtn.style.opacity = '1';
-        backToTopBtn.style.transform = 'translateY(0)';
-    } else {
-        backToTopBtn.style.opacity = '0';
-        backToTopBtn.style.transform = 'translateY(10px)';
-        setTimeout(() => {
-            if (window.scrollY <= 300) {
-                 backToTopBtn.classList.add('hidden');
-            }
-        }, 300);
-    }
-});
-
-backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
- 
