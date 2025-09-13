@@ -26,12 +26,10 @@
                 </div>
                 <nav class="hidden md:flex space-x-6">
                     <a href="#home" class="text-gray-600 hover:text-emerald-600 transition duration-300">Home</a>
+                    <button id="open-sorter-btn" class="text-gray-600 hover:text-emerald-600 transition duration-300">Waste Sorter</button>
                     <button id="open-map-btn" class="text-gray-600 hover:text-emerald-600 transition duration-300">Green Lungs Map</button>
                     <button id="open-calculator-btn" class="text-gray-600 hover:text-emerald-600 transition duration-300">Footprint Calculator</button>
                     <a href="#model" class="text-gray-600 hover:text-emerald-600 transition duration-300">How It Works</a>
-                    <a href="#dashboard" class="text-gray-600 hover:text-emerald-600 transition duration-300">Dashboard</a>
-                    <a href="#scaling" class="text-gray-600 hover:text-emerald-600 transition duration-300">Scaling Up</a>
-                    <a href="#solutions" class="text-gray-600 hover:text-emerald-600 transition duration-300">Solutions</a>
                 </nav>
                 <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:text-emerald-600 hover:bg-gray-100">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
@@ -41,6 +39,7 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2 bg-white">
              <a href="#home" class="block text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Home</a>
+             <button id="mobile-open-sorter-btn" class="block w-full text-left text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Waste Sorter</button>
              <button id="mobile-open-map-btn" class="block w-full text-left text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Green Lungs Map</button>
              <button id="mobile-open-calculator-btn" class="block w-full text-left text-gray-600 hover:text-emerald-600 transition duration-300 py-2">Footprint Calculator</button>
              <a href="#model" class="block text-gray-600 hover:text-emerald-600 transition duration-300 py-2">How It Works</a>
@@ -68,11 +67,11 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 scroll-animate">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">A Look Inside: The Science of Filtration</h2>
-                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">My model uses a three-stage process to clean the air, with each layer targeting a different type of pollutant.</p>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">My model uses a three-stage process to clean the air. Click on any layer to learn more.</p>
                 </div>
                 <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 text-left">
                     <!-- Layer 1 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg scroll-animate">
+                    <div id="pre-filter-card" class="bg-white p-8 rounded-xl shadow-lg scroll-animate filter-card">
                         <div class="flex items-center mb-4">
                             <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">1</div>
                             <h3 class="text-xl font-bold text-gray-800">Pre-Filter (Cotton Wool)</h3>
@@ -80,7 +79,7 @@
                         <p class="text-gray-600 leading-relaxed">This layer serves as the crucial first line of defense. It uses **mechanical filtration** to trap the largest airborne particles—things we can often see, like road dust, construction debris, pollen, and hair. By removing these larger contaminants first, the pre-filter prevents the more sensitive inner layers from getting clogged, dramatically increasing their lifespan and efficiency.</p>
                     </div>
                     <!-- Layer 2 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg scroll-animate" style="animation-delay: 0.2s;">
+                    <div id="charcoal-filter-card" class="bg-white p-8 rounded-xl shadow-lg scroll-animate filter-card" style="animation-delay: 0.2s;">
                         <div class="flex items-center mb-4">
                             <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">2</div>
                             <h3 class="text-xl font-bold text-gray-800">Adsorption Filter (Activated Charcoal)</h3>
@@ -88,7 +87,7 @@
                         <p class="text-gray-600 leading-relaxed">This layer works through a chemical process called **adsorption**, where pollutant molecules stick to its surface. Activated charcoal is treated to create millions of microscopic pores, giving it an incredibly large surface area. This acts like a sponge for harmful gases, traffic fumes, cooking smells, and Volatile Organic Compounds (VOCs), effectively removing odours and invisible chemical threats from the air.</p>
                     </div>
                     <!-- Layer 3 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg scroll-animate" style="animation-delay: 0.4s;">
+                    <div id="fine-filter-card" class="bg-white p-8 rounded-xl shadow-lg scroll-animate filter-card" style="animation-delay: 0.4s;">
                         <div class="flex items-center mb-4">
                             <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">3</div>
                             <h3 class="text-xl font-bold text-gray-800">Fine Particle Filter (Mask Cloth)</h3>
@@ -146,21 +145,21 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 scroll-animate">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">From Prototype to Planet: Scaling Up</h2>
-                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">My small model demonstrates a powerful principle. But how can this technology be applied on a large scale to make a real difference in a city like Kolkata?</p>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">My small model demonstrates a powerful principle. Click on a card to see how it applies to the real world.</p>
                 </div>
                 <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
                     <!-- Card 1 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg hover-card scroll-animate">
+                    <div id="industrial-card" class="bg-white p-8 rounded-xl shadow-lg hover-card scroll-animate scaling-card">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Industrial Chimney Filters</h3>
                         <p class="text-gray-600">Factories and power plants can be fitted with large-scale "scrubbers" and electrostatic precipitators. These are giant versions of my filter that can remove over 99% of particulate matter and harmful gases before they ever enter our atmosphere.</p>
                     </div>
                     <!-- Card 2 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg hover-card scroll-animate" style="animation-delay: 0.2s;">
+                    <div id="towers-card" class="bg-white p-8 rounded-xl shadow-lg hover-card scroll-animate scaling-card" style="animation-delay: 0.2s;">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Urban Air Purification Towers</h3>
                         <p class="text-gray-600">Some cities are experimenting with massive outdoor air purifiers, often called "smog towers." These towers draw in polluted city air, filter it using multiple layers just like my model, and release cleaner air back into the environment.</p>
                     </div>
                     <!-- Card 3 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg hover-card scroll-animate" style="animation-delay: 0.4s;">
+                    <div id="hvac-card" class="bg-white p-8 rounded-xl shadow-lg hover-card scroll-animate scaling-card" style="animation-delay: 0.4s;">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Advanced Building Filtration (HVAC)</h3>
                         <p class="text-gray-600">Every large modern building, like malls and offices, uses a centralized HVAC system with high-efficiency filters. This creates safe indoor air quality, protecting thousands of people from outdoor pollution daily.</p>
                     </div>
@@ -313,11 +312,121 @@
         </div>
     </div>
 
+    <!-- Modals for Filter Details -->
+    <div id="pre-filter-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <button class="close-filter-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="flex items-center mb-4">
+                <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">1</div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">Layer 1: Pre-Filter</h2>
+            </div>
+            <img src="https://placehold.co/600x400/e2e8f0/475569?text=Close-up+of+Cotton" alt="Pre-Filter" class="w-full h-auto object-cover rounded-lg my-4">
+            <p class="text-gray-700 leading-relaxed">The Pre-Filter is the workhorse of the system, responsible for **mechanical filtration**. Think of it like a sieve that catches larger debris. Its primary job is to stop particles that are big enough to see, such as dust from roads, pollen from trees, and even pet hair. This is crucial because it protects the more delicate and expensive filters that come after it. Without a pre-filter, the inner layers would get clogged very quickly and stop working effectively. In the real world, the filter on your home's air conditioner is a perfect example of a pre-filter.</p>
+        </div>
+    </div>
+    <div id="charcoal-filter-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <button class="close-filter-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="flex items-center mb-4">
+                <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">2</div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">Layer 2: Adsorption Filter</h2>
+            </div>
+            <img src="https://placehold.co/600x400/334155/e2e8f0?text=Porous+Charcoal+Surface" alt="Charcoal Filter" class="w-full h-auto object-cover rounded-lg my-4">
+            <p class="text-gray-700 leading-relaxed">The Activated Charcoal filter works on a molecular level through a process called **adsorption**. Unlike absorption (like a sponge soaking up water), adsorption involves pollutant molecules chemically sticking to the surface of the charcoal. Activated charcoal is incredibly porous; a single gram can have the surface area of a football field! This vast surface acts like a powerful magnet for odours, smoke, and Volatile Organic Compounds (VOCs)—harmful gases released from paints, cleaning agents, and vehicle exhaust. This is the same technology used in industrial gas masks and advanced water purifiers.</p>
+        </div>
+    </div>
+    <div id="fine-filter-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <button class="close-filter-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="flex items-center mb-4">
+                <div class="text-3xl font-bold text-emerald-500 bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">3</div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">Layer 3: Fine Particle Filter</h2>
+            </div>
+            <img src="https://placehold.co/600x400/e2e8f0/475569?text=Microscopic+Filter+Fibers" alt="Fine Filter" class="w-full h-auto object-cover rounded-lg my-4">
+            <p class="text-gray-700 leading-relaxed">This is the most important layer for health. It's designed to capture **PM2.5**, microscopic particles about 30 times smaller than the width of a human hair. These particles are so tiny they can evade our body's natural defenses in the nose and throat, travelling deep into our lungs and even entering the bloodstream. This can cause severe respiratory and cardiovascular problems. This filter, much like an N95 mask, uses a dense web of fibers to trap these invisible but highly dangerous pollutants, making the air significantly safer to breathe.</p>
+        </div>
+    </div>
+
+    <!-- Modals for Scaling Up Details -->
+    <div id="industrial-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <button class="close-scaling-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">Scaling Up: Industrial Chimney Filters</h2>
+            <img src="https://placehold.co/600x400/e2e8f0/475569?text=Industrial+Scrubber+Diagram" alt="Industrial Chimney Filter" class="w-full h-auto object-cover rounded-lg my-4">
+            <p class="text-gray-700 leading-relaxed">On an industrial scale, the principles of my filter are magnified. Factories use enormous systems called **electrostatic precipitators** and **scrubbers**. Precipitators use an electric charge to attract and trap soot and ash particles. Scrubbers then spray a liquid mist (often containing limestone) to capture harmful gases like sulfur dioxide, a major cause of acid rain. This multi-stage cleaning process, much like my model, can remove over 99% of pollutants, preventing them from being released into the atmosphere.</p>
+        </div>
+    </div>
+    <div id="towers-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <button class="close-scaling-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">Scaling Up: Urban Air Purification Towers</h2>
+            <img src="https://placehold.co/600x400/e2e8f0/475569?text=Smog+Tower" alt="Urban Air Purification Tower" class="w-full h-auto object-cover rounded-lg my-4">
+            <p class="text-gray-700 leading-relaxed">Imagine my small model scaled up to the size of a building—that's a **smog tower**. These large structures act as giant air purifiers for a city. They use powerful fans to suck in thousands of cubic meters of polluted air every hour. The air then passes through a series of filters, including pre-filters, HEPA filters (like my fine-particle filter), and activated carbon, before being released back out. While they can't solve an entire city's pollution problem, they can significantly improve air quality in their immediate vicinity, creating cleaner air zones in parks, squares, or residential areas.</p>
+        </div>
+    </div>
+    <div id="hvac-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <button class="close-scaling-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">Scaling Up: Advanced Building Filtration (HVAC)</h2>
+            <img src="https://placehold.co/600x400/e2e8f0/475569?text=HVAC+System" alt="HVAC System" class="w-full h-auto object-cover rounded-lg my-4">
+            <p class="text-gray-700 leading-relaxed">The technology in my model is something you likely experience every day without realizing it. Every large modern building—like shopping malls, cinemas, hospitals, and offices—uses a centralized **HVAC (Heating, Ventilation, and Air Conditioning)** system. These systems continuously circulate air, passing it through high-efficiency filters (like MERV or HEPA filters) that trap dust, pollen, bacteria, and PM2.5 particles from the outside. This creates a safe and clean indoor air environment, protecting thousands of people from the harmful effects of outdoor city pollution while they work, shop, or study.</p>
+        </div>
+    </div>
+
+    <!-- NEW: Modal for Waste Sorter -->
+    <div id="waste-sorter-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 relative w-full max-w-4xl max-h-[90vh] flex flex-col">
+            <button id="close-sorter-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition z-10">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">Kolkata Waste Sorter</h2>
+                <p class="text-md text-gray-600 mt-2 max-w-2xl mx-auto">Confused about where your trash goes? Type an item in the search bar to find out!</p>
+            </div>
+            <div class="mb-4">
+                <input type="text" id="waste-search-input" placeholder="e.g., plastic bottle, newspaper, battery..." class="w-full p-4 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition">
+            </div>
+            <div class="mb-6 text-center">
+                <p class="text-sm text-gray-500 mb-2">Or try a common item:</p>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button class="waste-quick-search bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold py-1 px-3 rounded-full transition">Plastic Bottle</button>
+                    <button class="waste-quick-search bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold py-1 px-3 rounded-full transition">Newspaper</button>
+                    <button class="waste-quick-search bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold py-1 px-3 rounded-full transition">Vegetable Peel</button>
+                    <button class="waste-quick-search bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold py-1 px-3 rounded-full transition">Battery</button>
+                </div>
+            </div>
+            <div id="waste-result-container" class="flex-grow overflow-y-auto p-6 bg-slate-50 rounded-lg">
+                <!-- Search results will be displayed here -->
+                <div class="text-center text-gray-500">
+                    <p>Enter an item name above to see how to dispose of it correctly according to KMC guidelines.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto px-6 text-center">
             <p>© 2025 The Urban Lung Project. An EVS initiative.</p>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top-btn" class="hidden fixed bottom-8 right-8 bg-emerald-500 hover:bg-emerald-600 text-white font-bold p-3 rounded-full shadow-lg transition-opacity duration-300">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+    </button>
 
     <!-- Link to your new JS file -->
     <script src="script.js"></script>

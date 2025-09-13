@@ -3,10 +3,7 @@ body {
     background-color: #ffffff; /* Start with a clean white background */
 }
 
-/* --- Idea 1: Thematic Color Palette --- */
-/* We will use Tailwind classes for section backgrounds directly in the HTML (e.g., bg-slate-50), 
-   but specific component styles are defined here. */
-
+/* --- Thematic Color Palette & Component Styles --- */
 .aqi-widget-container {
     border-radius: 12px;
     overflow: hidden;
@@ -20,7 +17,7 @@ body {
     font-weight: 600;
 }
 
-/* --- Idea 2: Engaging Homepage Header --- */
+/* --- Engaging Homepage Header --- */
 .hero-section {
     position: relative;
     height: 100vh;
@@ -43,9 +40,9 @@ body {
     z-index: 1;
 }
 
-/* --- Idea 3: Animations and Hover Effects --- */
+/* --- Animations and Hover Effects --- */
 
-/* Hover effect for cards */
+/* General hover effect for cards */
 .hover-card {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
@@ -54,6 +51,23 @@ body {
     transform: translateY(-8px);
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
+
+/* Style for the clickable filter cards in "How It Works" */
+.filter-card {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.filter-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Style for the clickable scaling-up cards */
+.scaling-card {
+    cursor: pointer;
+}
+
 
 /* Scroll animation */
 .scroll-animate {
@@ -66,3 +80,10 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* Back to Top Button styles */
+#back-to-top-btn {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateY(10px);
+}
+
