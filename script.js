@@ -273,3 +273,52 @@ quickSearchButtons.forEach(button => {
     });
 });
 
+
+// --- Scroll Animation Logic ---
+const scrollElements = document.querySelectorAll('.scroll-animate');
+
+const elementInView = (el, dividend = 1) => {
+    const elementTop = el.getBoundingClientRect().top;
+    return (
+        elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
+    );
+};
+
+const displayScrollElement = (element) => {
+    element.classList.add('is-visible');
+};
+
+const handleScrollAnimation = () => {
+    scrollElements.forEach((el) => {
+        if (elementInView(el, 1.25)) {
+            displayScrollElement(el);
+        }
+    });
+};
+
+window.addEventListener('scroll', handleScrollAnimation);
+handleScrollAnimation(); // Trigger on load
+
+// --- Back to Top Button Logic ---
+const backToTopBtn = document.getElementById('back-to-top-btn');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTopBtn.classList.remove('hidden');
+        backToTopBtn.style.opacity = '1';
+        backToTopBtn.style.transform = 'translateY(0)';
+    } else {
+        backToTopBtn.style.opacity = '0';
+        backToTopBtn.style.transform = 'translateY(10px)';
+        setTimeout(() => {
+            if (window.scrollY <= 300) {
+                 backToTopBtn.classList.add('hidden');
+            }
+        }, 300);
+    }
+});
+
+backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
