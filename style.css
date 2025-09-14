@@ -24,7 +24,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('https://placehold.co/1920x1080/a7f3d0/1e40af?text=Beautiful+Kolkata+Park+Image'); /* Placeholder - REPLACE THIS! */
+    background-image: url('maidan victoria.jpg'); /* Placeholder - REPLACE THIS! */
     background-size: cover;
     background-position: center;
     background-attachment: fixed; /* Creates a nice parallax effect */
